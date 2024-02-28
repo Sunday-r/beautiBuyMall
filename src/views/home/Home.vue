@@ -1,11 +1,14 @@
 <template>
-  <div id="home">
+  <div id="home" class="wrapper">
     <nav-bar class="home-nav"><template v-slot:center>购物街</template></nav-bar>
-    <home-swiper :banners="banners"/>
-    <recommend-view :recommends="recommends"/>
-    <feature-view/>
-    <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
-    <goods-list :goods="showGoods"></goods-list>
+    <scroll class="content" ref="scroll">
+      <home-swiper :banners="banners"/>
+      <recommend-view :recommends="recommends"/>
+      <feature-view/>
+      <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
+      <goods-list :goods="showGoods"></goods-list>
+    </scroll>   
+    <back-top @click="backClick" /> 
   </div>
 </template>
 
@@ -17,6 +20,8 @@ import FeatureView from './childComps/FeatureView';
 import NavBar from '@/components/common/navbar/NavBar.vue';
 import TabControl from '@/components/content/tabControl/TabControl.vue';
 import GoodsList from '@/components/content/goods/GoodsList.vue';
+import Scroll from '@/components/common/scroll/Scroll.vue';
+import BackTop from '@/components/content/backTop/BackTop.vue'
 
 
 import { getHomeMultidata,getHomeGoods } from '@/network/home';
@@ -30,7 +35,9 @@ export default {
       FeatureView,
       NavBar,
       TabControl,
-      GoodsList
+      GoodsList,
+      Scroll,
+      BackTop
     },
     data(){
       return {
@@ -75,6 +82,9 @@ export default {
             break          
         }
       },
+      backClick(){
+       this.$refs.scroll.scrollTo(0, 0, 500);
+      },
       /**
        * 网络请求相关的方法
        */
@@ -101,6 +111,7 @@ export default {
 <style scoped>
   #home{
     padding-top: 44px;
+    height:100vh;
   }
   .home-nav{
     background-color: var(--color-tint);
@@ -117,4 +128,22 @@ export default {
     top: 44px;
     z-index: 9;
   }
+  .content{
+    overflow: hidden;
+
+    position: absolute;
+    top: 44px;
+    bottom: 49px;
+    left: 0;
+    right: 0;
+  }
+  /* 确定中间的高度的两种方法 见上和下 */
+  /* .content{
+    height: calc(100vh-98px);
+    overflow: hidden;
+    /* margin-top: 44px; 
+  } */
+  /* .wrapper{
+    height: 100%;
+  } */
 </style>
