@@ -10,7 +10,7 @@
       <home-swiper :banners="banners"/>
       <recommend-view :recommends="recommends"/>
       <feature-view/>
-      <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
+      <tab-control  :titles="['流行','新款','精选']" @tabClick="tabClick" ref="tabControl"/>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>   
     <back-top @click="backClick" v-show="isShowBackTop"/> 
@@ -30,6 +30,7 @@ import BackTop from '@/components/content/backTop/BackTop.vue'
 
 
 import { getHomeMultidata,getHomeGoods } from '@/network/home';
+import { debounce } from '@/components/common/utils';
 
 
 export default {
@@ -54,7 +55,8 @@ export default {
           'sell':{page: 0, list:[]}
         },
         currentType: 'pop',
-        isShowBackTop: false
+        isShowBackTop: false,
+        tabOffsetTop: 0
       }
     },
     computed:{
@@ -65,15 +67,33 @@ export default {
     created(){
       // 1.请求多个数据
       this.getHomeMultidata()
+
       // 2.请求商品数据
       this.getHomeGoods('pop')
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
+
+      
+    },
+    mounted(){
+      //1.图片加载完成的事件监听
+      const refresh = debounce(this.$refs.scroll.refresh);
+      //监听item中图片加载完成
+      this.$bus.$on('itemImageLoad',()=>{
+        // console.log("-----")
+        // this.$refs.scroll.refresh()
+        refresh()
+      })
+
+      //2.获取tabControl的offsetTop
+      this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop;
+
     },
     methods:{
       /**
        * 事件监听相关的方法
        */
+      
       tabClick(index){
         // console.log(index);
         switch(index){
@@ -115,7 +135,7 @@ export default {
           // console.log(res);
           this.goods[type].list.push(...res.data.list);
           this.goods[type].page += 1;   
-          
+          //完成上拉加载更多
           this.$refs.scroll.finishPullUp();
       })
       }
@@ -138,11 +158,11 @@ export default {
     top: 0;
     z-index: 9;
   }
-  .tab-control{
+  /* .tab-control{
     position: sticky;
     top: 44px;
     z-index: 9;
-  }
+  } */
   .content{
     overflow: hidden;
 
