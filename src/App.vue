@@ -1,11 +1,11 @@
 <template>
   <div id="App">
     <router-view v-slot="{ Component }">
-      <keep-alive>
+      <keep-alive exclude="Detail">
         <component :is="Component" />
       </keep-alive>
     </router-view>    
-    <main-tab-bar/>
+    <main-tab-bar v-show="this.$route.path.indexOf('detail')==-1"/>
   </div>
 </template>
 <script>
