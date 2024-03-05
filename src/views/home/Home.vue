@@ -31,15 +31,15 @@ import HomeSwiper from './childComps/HomeSwiper.vue';
 import RecommendView from './childComps/RecommendView.vue';
 import FeatureView from './childComps/FeatureView';
 
-import NavBar from '@/components/common/navbar/NavBar.vue';
-import TabControl from '@/components/content/tabControl/TabControl.vue';
-import GoodsList from '@/components/content/goods/GoodsList.vue';
-import Scroll from '@/components/common/scroll/Scroll.vue';
-import BackTop from '@/components/content/backTop/BackTop.vue'
+import NavBar from 'components/common/navbar/NavBar.vue';
+import TabControl from 'components/content/tabControl/TabControl.vue';
+import GoodsList from 'components/content/goods/GoodsList.vue';
+import Scroll from 'components/common/scroll/Scroll.vue';
+import BackTop from 'components/content/backTop/BackTop.vue'
 
 
-import { getHomeMultidata,getHomeGoods } from '@/network/home';
-import { debounce } from '@/components/common/utils';
+import { getHomeMultidata,getHomeGoods } from 'network/home';
+import { itemListenerMixin } from '@/common/mixin';
 
 
 export default {
@@ -54,6 +54,7 @@ export default {
       Scroll,
       BackTop
     },
+    mixins:[itemListenerMixin],
     data(){
       return {
         banners:[],
@@ -67,7 +68,8 @@ export default {
         isShowBackTop: false,
         tabOffsetTop: 0,
         isTabFixed: false,
-        saveY: 0
+        saveY: 0,
+        ItemImageListener:null
       }
     },
     computed:{
@@ -81,7 +83,10 @@ export default {
     },
     // 离开
     deactivated(){
+      // 1.保存Y值
       this.saveY = this.$refs.scroll.getScrollY();
+      //2.取消全局事件的监听
+      this.$bus.$off('itemImgLoad',this.ItemImageListener)
     },
     created(){
       // 1.请求多个数据
@@ -94,15 +99,8 @@ export default {
 
       
     },
-    mounted(){
-      //1.图片加载完成的事件监听
-      const refresh = debounce(this.$refs.scroll.refresh);
-      //监听item中图片加载完成
-      this.$bus.$on('itemImageLoad',()=>{
-        // console.log("-----")
-        // this.$refs.scroll.refresh()
-        refresh()
-      })  
+    mounted(){          
+      
     },
     methods:{
       /**

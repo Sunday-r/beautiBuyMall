@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemClick">
-    <img :src="goodsItem.show.img" alt="">
+    <img :src="showImage" alt="">
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
       <span class="price">{{ goodsItem.price }}</span>
@@ -20,10 +20,24 @@ export default {
       }
     }
   },
+  computed:{
+    showImage(){
+      return this.goodsItem.image || this.goodsItem.show.img;
+    }
+  },
   methods:{
     imageLoad(){
       this.$bus.$emit('itemImageLoad');
       // console.log('imageLoad');
+
+      //只在主页中的加载完了发送通知  【方法1】
+      // if(this.$route.path.indexOf('/home')){
+      //   this.$bus.$emit('homeItemImageLoad');
+      // }else if(this.$route.path.indexOf('/detail')){
+      //   this.$bus.$emit('detailItemImageLoad');
+      // }
+      //【方法2】在home中离开时取消全局监听
+
     },
     itemClick(){
       // console.log("tiaozhuan到详情页");
