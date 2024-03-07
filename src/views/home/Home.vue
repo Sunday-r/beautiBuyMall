@@ -37,9 +37,8 @@ import GoodsList from 'components/content/goods/GoodsList.vue';
 import Scroll from 'components/common/scroll/Scroll.vue';
 import BackTop from 'components/content/backTop/BackTop.vue'
 
-
 import { getHomeMultidata,getHomeGoods } from 'network/home';
-import { itemListenerMixin } from '@/common/mixin';
+import { itemListenerMixin,backTopMixin } from '@/common/mixin';
 
 
 export default {
@@ -54,7 +53,7 @@ export default {
       Scroll,
       BackTop
     },
-    mixins:[itemListenerMixin],
+    mixins:[itemListenerMixin,backTopMixin],
     data(){
       return {
         banners:[],
@@ -65,7 +64,6 @@ export default {
           'sell':{page: 0, list:[]}
         },
         currentType: 'pop',
-        isShowBackTop: false,
         tabOffsetTop: 0,
         isTabFixed: false,
         saveY: 0,
@@ -122,14 +120,11 @@ export default {
         this.$refs.tabControl1.currentIndex = index;
         this.$refs.tabControl2.currentIndex = index;
       },
-      backClick(){
-       this.$refs.scroll.scrollTo(0, 0, 500);
-      },
+      
       contentScroll(position){
         // console.log(position);
-        //1.判断BackTop是否显示
-        this.isShowBackTop =  (-position.y) > 1000;
-        //2.决定TabControl是否吸顶（position:fixed)
+        this.listenShowBackTop(position);
+         //决定TabControl是否吸顶（position:fixed)
         this.isTabFixed = (-position.y) > this.tabOffsetTop;
         // console.log(this.tabOffsetTop);
         // console.log(this.isTabFixed)
