@@ -5,6 +5,9 @@
                 ref="scroll" 
                 :probe-type="3"
                 @scroll="contentScroll">
+                <ul>
+                    <li v-for="item in $store.state.carList">{{ item }}</li>
+                </ul>
             <detail-swiper v-if="topImages!=''" :topImages="topImages"/>
             <detail-base-info :goods="goods"/>
             <detail-shop-info :shop="shop"/>
@@ -12,9 +15,9 @@
             <detail-param-info :param-info="paramInfo" ref="params"/>
             <detail-comment-info :comment-info="commentInfo" ref="comment"/>
             <goods-list :goods="recommends" ref="recommend"/>
-        </scroll>
-        <back-top @click="backClick" v-show="isShowBackTop"/> 
-        <detail-bottom-bar/>               
+        </scroll>        
+        <detail-bottom-bar @addToCart="addToCart"/>    
+        <back-top @click="backClick" v-show="isShowBackTop"/>            
     </div>
 </template>
 <script>
@@ -157,7 +160,18 @@ export default {
                }
         }
         this.listenShowBackTop(position);
-
+    },
+    addToCart(){
+        // 1.获取购物车需要展示的信息
+        const product = {}
+        product.image = this.topImages[0];
+        product.title = this.goods.title
+        product.desc = this.goods.desc;
+        product.Price = this.goods.realPrice;
+        product.iid = this.iid;
+        // 2.添加到购物车中  npm install vuex --save
+        this.$store.commit('addCart', product)
+        console.log("addCart");
     }
    },
    //不在缓存里，所以不用deactivated
