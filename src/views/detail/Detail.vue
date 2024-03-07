@@ -6,7 +6,7 @@
                 :probe-type="3"
                 @scroll="contentScroll">
                 <ul>
-                    <li v-for="item in $store.state.carList">{{ item }}</li>
+                    <li v-for="(item,index) in $store.state.carList" :key="index">{{ item }}</li>
                 </ul>
             <detail-swiper v-if="topImages!=''" :topImages="topImages"/>
             <detail-base-info :goods="goods"/>
