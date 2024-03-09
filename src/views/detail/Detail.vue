@@ -170,8 +170,8 @@ export default {
         product.Price = this.goods.realPrice;
         product.iid = this.iid;
         // 2.添加到购物车中  npm install vuex --save
-        this.$store.commit('addCart', product)
-        console.log("addCart");
+        this.$store.dispatch('addToCart', product)
+        // console.log("addCart");
     }
    },
    //不在缓存里，所以不用deactivated
@@ -193,6 +193,7 @@ export default {
     position: relative;
     z-index: 9;
     background-color: #fff;
+    color: black;
 }
 
 .content{
