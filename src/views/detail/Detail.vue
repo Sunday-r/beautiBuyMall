@@ -17,7 +17,8 @@
             <goods-list :goods="recommends" ref="recommend"/>
         </scroll>        
         <detail-bottom-bar @addToCart="addToCart"/>    
-        <back-top @click="backClick" v-show="isShowBackTop"/>            
+        <back-top @click="backClick" v-show="isShowBackTop"/> 
+        <toast :message="message" :show="show"/>           
     </div>
 </template>
 <script>
@@ -31,8 +32,10 @@ import DetailCommentInfo from './childComps/DetailCommentInfo.vue'
 import DetailBottomBar from './childComps/DetailBottomBar.vue'
 // import BackTop from 'components/content/backTop/BackTop.vue'
 
+
 import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList.vue'
+// import Toast from 'components/common/toast/Toast.vue'
 
 import {getDetail, Goods, Shop, GoodsParam,getRecommend} from 'network/detail.js'
 import { itemListenerMixin,backTopMixin } from '@/common/mixin'
@@ -51,7 +54,7 @@ export default {
     DetailCommentInfo,
     DetailBottomBar,
     GoodsList,
-    Scroll
+    Scroll,
    },
    mixins:[itemListenerMixin,backTopMixin],
    data(){
@@ -67,7 +70,9 @@ export default {
         ItemImageListener:null,
         themeTopYs:[],
         getThemeTopY:null,
-        currentIndex:0
+        currentIndex:0,
+        message:'',
+        show:false
     }
    },
    created(){
@@ -170,8 +175,23 @@ export default {
         product.Price = this.goods.realPrice;
         product.iid = this.iid;
         // 2.添加到购物车中  npm install vuex --save
-        this.$store.dispatch('addToCart', product)
-        // console.log("addCart");
+        this.$store.dispatch('addToCart', product).then(res => {
+            this.$toast.show(res,2000)
+            // this.show = true;
+            // this.message = res;
+            // // console.log(res);
+            // setTimeout(() => {
+            //     this.show = false;
+            //     this.message = '';
+            // }, 1500);
+            
+        })
+        //另一种写法
+        // this.addToCart(product).then(res => {
+        //     console.log(res);
+        // })
+
+
     }
    },
    //不在缓存里，所以不用deactivated

@@ -7,7 +7,7 @@
     <div class="price">
       合计：{{ totalPrice }}
     </div>
-    <div class="calculate">
+    <div class="calculate" @click="calcClick">
       去计算 ({{ checkLength }})
     </div>
   </div>
@@ -50,6 +50,11 @@
         // 简化写法失败，因为同时在影响着item的checked属性，isSelectAll是基于此的,在相互影响
         // this.cartList.forEach(item => item.checked = !isSelectAll);
 
+      },
+      calcClick(){
+        if(!this.isSelectAll){
+          this.$toast.show("请选择购买的商品",2000);
+        }
       }
     }
    
