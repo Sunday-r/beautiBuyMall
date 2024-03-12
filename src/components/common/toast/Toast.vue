@@ -7,22 +7,32 @@
 <script>
 export default {
     name:"Toast",
-    data(){
-        return{
-            message:'',
-            show:false
-        }
-    },
-    methods:{
-        toastShow(message='默认文字', duration=2000){
-            this.show = true;
-            this.message = message;
-            setTimeout(() => {
-                this.show = false;
-                this.message = '';
-            }, duration);
-        }
+    props: {
+      message: {
+        type: String,
+        default: ''
+      },
+      show: {
+        type: Boolean,
+        default: false
+      }
     }
+    // data(){
+    //     return{
+    //         message:'',
+    //         show:false
+    //     }
+    // },
+    // methods:{
+    //     toastShow(message='默认文字', duration=2000){
+    //         this.show = true;
+    //         this.message = message;
+    //         setTimeout(() => {
+    //             this.show = false;
+    //             this.message = '';
+    //         }, duration);
+    //     }
+    // }
 }
 </script>
 <style scoped>

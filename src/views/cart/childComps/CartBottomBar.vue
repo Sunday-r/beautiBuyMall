@@ -51,11 +51,11 @@
         // this.cartList.forEach(item => item.checked = !isSelectAll);
 
       },
-      calcClick(){
-        if(!this.isSelectAll){
-          this.$toast.show("请选择购买的商品",2000);
-        }
-      }
+      // calcClick(){
+      //   if(!this.isSelectAll){
+      //     this.$toast.show("请选择购买的商品",2000);
+      //   }
+      // }
     }
    
 	}

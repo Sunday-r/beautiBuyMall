@@ -35,7 +35,7 @@ import DetailBottomBar from './childComps/DetailBottomBar.vue'
 
 import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList.vue'
-// import Toast from 'components/common/toast/Toast.vue'
+import Toast from 'components/common/toast/Toast.vue'
 
 import {getDetail, Goods, Shop, GoodsParam,getRecommend} from 'network/detail.js'
 import { itemListenerMixin,backTopMixin } from '@/common/mixin'
@@ -55,6 +55,7 @@ export default {
     DetailBottomBar,
     GoodsList,
     Scroll,
+    Toast
    },
    mixins:[itemListenerMixin,backTopMixin],
    data(){
@@ -176,14 +177,14 @@ export default {
         product.iid = this.iid;
         // 2.添加到购物车中  npm install vuex --save
         this.$store.dispatch('addToCart', product).then(res => {
-            this.$toast.show(res,2000)
-            // this.show = true;
-            // this.message = res;
-            // // console.log(res);
-            // setTimeout(() => {
-            //     this.show = false;
-            //     this.message = '';
-            // }, 1500);
+            // this.$toast.show(res,2000)
+            this.show = true;
+            this.message = res;
+            // console.log(res);
+            setTimeout(() => {
+                this.show = false;
+                this.message = '';
+            }, 1500);
             
         })
         //另一种写法
